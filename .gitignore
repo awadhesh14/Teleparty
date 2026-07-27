@@ -22,3 +22,7 @@ data/gold/*
 # Logs
 *.log
 logs/
+
+# Rill temporary working files
+rill/tmp/
+
