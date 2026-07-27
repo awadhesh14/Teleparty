@@ -92,3 +92,14 @@ services:
     depends_on:
       - spark-master
     user: root
+
+  query-ui:
+    image: rilldata/rill:latest
+    container_name: teleparty-query-ui
+    ports:
+      - "8082:9000"
+    volumes:
+      - ./data:/data
+      - ./rill:/rill
+    command: start /rill --port 9000 --readonly
+

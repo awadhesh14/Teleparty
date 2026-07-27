@@ -1,0 +1,2 @@
+type: duckdb
+sql: "SELECT * FROM read_parquet('/data/silver/imdb_parquet/**/*.parquet', hive_partitioning=1)"
