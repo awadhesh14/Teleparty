@@ -2,7 +2,10 @@ version: '3.8'
 
 x-airflow-common:
   &airflow-common
-  image: apache/airflow:2.9.2
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: apache-airflow-custom:2.9.2
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
@@ -10,7 +13,9 @@ x-airflow-common:
     AIRFLOW__CORE__FERNET_KEY: 46BKJoQYlPPOexq0OhDZnIlUkKD333V4T5Ie7g9v3Qc=
     AIRFLOW__WEBSERVER__SECRET_KEY: a_very_secure_secret_key_12345
     AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+    AIRFLOW_CONN_SPARK_DEFAULT: 'spark://spark-master:7077'
     _PIP_ADDITIONAL_REQUIREMENTS: apache-airflow-providers-apache-spark==4.8.2 pyspark==3.5.1 duckdb==1.0.0 kagglehub
+
   volumes:
     - ./dags:/opt/airflow/dags
     - ./src:/opt/airflow/src
