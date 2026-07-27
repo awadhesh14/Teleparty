@@ -1,11 +1,6 @@
-version: '3.8'
-
 x-airflow-common:
   &airflow-common
-  build:
-    context: .
-    dockerfile: Dockerfile
-  image: apache-airflow-custom:2.9.2
+  image: apache-airflow-custom:latest
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
@@ -13,8 +8,8 @@ x-airflow-common:
     AIRFLOW__CORE__FERNET_KEY: 46BKJoQYlPPOexq0OhDZnIlUkKD333V4T5Ie7g9v3Qc=
     AIRFLOW__WEBSERVER__SECRET_KEY: a_very_secure_secret_key_12345
     AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
-    AIRFLOW_CONN_SPARK_DEFAULT: 'spark://spark-master:7077'
-    _PIP_ADDITIONAL_REQUIREMENTS: apache-airflow-providers-apache-spark==4.8.2 pyspark==3.5.1 duckdb==1.0.0 kagglehub
+    AIRFLOW_CONN_SPARK_DEFAULT: '{"conn_type": "spark", "host": "spark://spark-master:7077"}'
+    _PIP_ADDITIONAL_REQUIREMENTS: ''
 
   volumes:
     - ./dags:/opt/airflow/dags
@@ -28,7 +23,7 @@ x-airflow-common:
 
 services:
   postgres:
-    image: postgres:13
+    image: postgres:latest
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
@@ -42,6 +37,9 @@ services:
 
   airflow-init:
     <<: *airflow-common
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: version
     environment:
       <<: *airflow-common-env
@@ -74,7 +72,7 @@ services:
         condition: service_completed_successfully
 
   spark-master:
-    image: apache/spark:3.5.1
+    image: apache/spark:3.5.3
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     ports:
       - "8081:8080"
@@ -87,8 +85,11 @@ services:
     user: root
 
   spark-worker:
-    image: apache/spark:3.5.1
+    image: apache/spark:3.5.3
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    environment:
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
     volumes:
       - ./data:/opt/airflow/data
       - ./src:/opt/airflow/src

@@ -7,6 +7,7 @@ help:
 	@echo "  make clean       - Stop containers and remove all local data"
 
 up:
+	docker-compose build
 	docker-compose up -d
 	@echo "Airflow and Spark are up! Give it a moment to initialize."
 	@echo "Airflow UI: http://localhost:8080 (airflow/airflow)"

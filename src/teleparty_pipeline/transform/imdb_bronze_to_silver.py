@@ -1,5 +1,12 @@
 import os
+import sys
 import argparse
+
+# Ensure src path is available for imports when executed via spark-submit
+src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+
 from teleparty_pipeline.utils.spark_utils import get_spark_session
 from teleparty_pipeline.transform.cleansers import replace_nulls
 from pyspark.sql.functions import col
