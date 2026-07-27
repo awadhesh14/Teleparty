@@ -1,0 +1,4 @@
+-e .
+pyspark==3.5.1
+duckdb==1.0.0
+kagglehub
