@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "teleparty_pipeline"
+name = "teleparty-lakehouse"
 version = "0.1.0"
-description = "IMDb Lakehouse to OLAP Pipeline for Teleparty"
+description = "IMDb Lakehouse to OLAP Pipeline for Teleparty-Lakehouse"
 authors = [
     {name = "Applicant", email = "applicant@example.com"}
 ]

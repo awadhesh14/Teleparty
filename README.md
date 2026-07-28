@@ -1,4 +1,4 @@
-# Teleparty IMDb Lakehouse to OLAP Pipeline
+# Teleparty-Lakehouse
 
 This repository contains a production-grade local data pipeline built to ingest, process, and analyze the 2GB IMDb dataset. 
 

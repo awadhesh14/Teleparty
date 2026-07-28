@@ -1,0 +1,22 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    git \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install native Rill binary directly (arm64 / amd64 auto-detection)
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then PLATFORM="linux_arm64"; else PLATFORM="linux_amd64"; fi && \
+    VERSION=$(curl -s https://cdn.rilldata.com/rill/latest.txt) && \
+    curl -L "https://cdn.rilldata.com/rill/${VERSION}/rill_${PLATFORM}.zip" -o rill.zip && \
+    unzip rill.zip && \
+    mv rill /usr/local/bin/ && \
+    rm rill.zip
+
+WORKDIR /data
+
+ENTRYPOINT ["rill"]
+CMD ["start", "/rill", "--port", "9000", "--readonly"]

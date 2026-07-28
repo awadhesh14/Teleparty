@@ -100,7 +100,10 @@ services:
     user: root
 
   query-ui:
-    image: rilldata/rill:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.rill
+    image: teleparty-rill:latest
     container_name: teleparty-query-ui
     ports:
       - "8082:9000"
