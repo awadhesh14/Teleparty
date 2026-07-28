@@ -21,8 +21,22 @@ def download_data(dest_dir: str):
         return
 
     print("Downloading dataset via kagglehub...", flush=True)
-    # Download latest version
-    path = kagglehub.dataset_download("ashirwadsangwan/imdb-dataset")
+    dataset_handle = "ashirwadsangwan/imdb-dataset"
+    cache_dir = os.path.expanduser(f"~/.cache/kagglehub/datasets/{dataset_handle}")
+    
+    path = None
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            path = kagglehub.dataset_download(dataset_handle)
+            break
+        except Exception as e:
+            print(f"kagglehub download attempt {attempt}/{max_retries} failed: {e}", flush=True)
+            if os.path.exists(cache_dir):
+                print(f"Cleaning up corrupted kagglehub cache directory: {cache_dir}...", flush=True)
+                shutil.rmtree(cache_dir, ignore_errors=True)
+            if attempt == max_retries:
+                raise
     print(f"Dataset downloaded to cache: {path}", flush=True)
     
     print(f"Copying files to {dest_dir}...", flush=True)
