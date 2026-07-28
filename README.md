@@ -1,6 +1,6 @@
 # Teleparty IMDb Lakehouse to OLAP Pipeline
 
-Production-grade local data pipeline built for the **Teleparty Data Engineering Challenge**. 
+Mock local data pipeline built for the **Teleparty Data Engineering Challenge**. 
 
 This project ingests, cleanses, partitions, and loads the 2GB Kaggle IMDb dataset using an end-to-end **Medallion Architecture (Bronze → Silver → Gold)** orchestrated with **Apache Airflow**, transformed via **Apache Spark**, loaded into a **DuckDB OLAP engine**, and surfaced through a **Rill Developer BI UI**.
 
