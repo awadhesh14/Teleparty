@@ -47,9 +47,14 @@ def process_imdb_data(bronze_dir: str, silver_dir: str):
     print("Bronze to Silver processing completed successfully.")
 
 if __name__ == "__main__":
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
+    default_bronze = os.getenv("BRONZE_DIR", os.path.join(PROJECT_ROOT, "data/source"))
+    default_silver = os.getenv("SILVER_DIR", os.path.join(PROJECT_ROOT, "data/silver/imdb_parquet"))
+
     parser = argparse.ArgumentParser(description="Bronze to Silver Spark Job")
-    parser.add_argument("--bronze_dir", type=str, default="/data/bronze", help="Path to bronze data")
-    parser.add_argument("--silver_dir", type=str, default="/data/silver/imdb_parquet", help="Path to silver output")
+    parser.add_argument("--bronze_dir", type=str, default=default_bronze, help="Path to bronze data")
+    parser.add_argument("--silver_dir", type=str, default=default_silver, help="Path to silver output")
     args = parser.parse_args()
     
     process_imdb_data(args.bronze_dir, args.silver_dir)
+

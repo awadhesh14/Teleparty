@@ -47,10 +47,16 @@ def load_silver_to_gold(silver_dir: str, gold_db_path: str, ddl_path: str):
     con.close()
 
 if __name__ == "__main__":
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
+    default_silver = os.getenv("SILVER_DIR", os.path.join(PROJECT_ROOT, "data/silver/imdb_parquet"))
+    default_gold = os.getenv("GOLD_DB_PATH", os.path.join(PROJECT_ROOT, "data/gold/imdb.duckdb"))
+    default_ddl = os.getenv("GOLD_DDL_PATH", os.path.join(PROJECT_ROOT, "src/teleparty_pipeline/models/create_imdb_gold.sql"))
+
     parser = argparse.ArgumentParser(description="Silver to Gold DuckDB Job")
-    parser.add_argument("--silver_dir", type=str, default="/opt/airflow/data/silver/imdb_parquet", help="Path to silver data")
-    parser.add_argument("--gold_db", type=str, default="/opt/airflow/data/gold/imdb.duckdb", help="Path to duckdb database")
-    parser.add_argument("--ddl", type=str, default="/opt/airflow/src/teleparty_pipeline/models/create_imdb_gold.sql", help="Path to DDL")
+    parser.add_argument("--silver_dir", type=str, default=default_silver, help="Path to silver data")
+    parser.add_argument("--gold_db", type=str, default=default_gold, help="Path to duckdb database")
+    parser.add_argument("--ddl", type=str, default=default_ddl, help="Path to DDL")
     args = parser.parse_args()
     
     load_silver_to_gold(args.silver_dir, args.gold_db, args.ddl)
+
